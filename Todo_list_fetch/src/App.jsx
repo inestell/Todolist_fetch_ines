@@ -33,7 +33,7 @@ function App() {
 				headers: {"Content-type": "application/json"},
 				body: JSON.stringify({label: task, is_done: false})
 			});
-			//setList([...list, task]); not working properly, don't know why
+			//setList([...list, task]); not working properly, don't know why. As it was not working I had to write the next line (fetchTasks()).
 			fetchTasks();
 			setTask("");
 		}
