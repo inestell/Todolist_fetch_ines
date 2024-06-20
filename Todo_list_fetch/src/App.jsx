@@ -33,8 +33,8 @@ function App() {
 				headers: {"Content-type": "application/json"},
 				body: JSON.stringify({label: task, is_done: false})
 			});
-			//setList([...list, task]); not working properly, don't know why. As it was not working I had to write the next line (fetchTasks()).
-			fetchTasks();
+			setList([...list, {label: task, is_done: false}]);
+
 			setTask("");
 		}
 	};
@@ -44,27 +44,40 @@ function App() {
 		const deleteMyAPITask = await fetch(`https://playground.4geeks.com/todo/todos/${list[index].id}`, {
 			method: "DELETE", 
 		});
-		const updatedList = list.filter((el, i) => i !== index);
-		setList(updatedList);
+		fetchTasks();
 	};
 
+	//This function to delete all tasks
+	const handleDeleteUser = async () => {
+		const deleteAll = await fetch('https://playground.4geeks.com/todo/users/inestell'
+		, {
+			method: "DELETE"
+		});
+		setList([]);
+	}
+
 	return (
-		<div className="container">
-			<h1>Todos</h1>
-			<input placeholder={list.length !== 0 ? "What needs to be done?" : "No tasks, add a task"} 
-					type="text" 
-					value={task} 
-					onChange={(e) => setTask(e.target.value)} 
-					onKeyUp={addTask} />
-			<ul>
-				{list.map((item, index) => 
-					<li key={index}>
-						{item.label}
-						<span className="hidden"
-							onClick={() => deleteTask(index)}>✕</span>
-					</li>)}
-			</ul>
-			<p className="info-below">{list.length} item left</p>
+		<div>
+			<div className="container">
+				<h1>Todos</h1>
+				<input placeholder={list.length !== 0 ? "What needs to be done?" : "No tasks, add a task"} 
+						type="text" 
+						value={task} 
+						onChange={(e) => setTask(e.target.value)} 
+						onKeyUp={addTask} />
+				<ul>
+					{list.map((item, index) => 
+						<li key={index}>
+							{item.label}
+							<span className="hidden"
+								onClick={() => deleteTask(index)}>✕</span>
+						</li>)}
+				</ul>
+				<p className="info-below">{list.length} item left</p>
+			</div>
+			<div className="myButton">
+				<button onClick={handleDeleteUser}>Delete this list</button>
+			</div>
 		</div>
 	)
 };
